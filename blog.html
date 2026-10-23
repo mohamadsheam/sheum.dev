@@ -1,0 +1,100 @@
+---
+layout: base.html
+title: "Blog — Nazmul Hasan Sheum"
+---
+
+<div class="section-wrap blog-page-wrap">
+    
+    <!-- Blog Title Header -->
+    <div class="blog-header">
+        <p class="eyebrow">WRITING & NOTES</p>
+        <h1>Engineering & Software Architecture</h1>
+        <p>Deep dives into backend systems, Laravel, databases, and scaling.</p>
+    </div>
+
+    <!-- Two Column Layout: Feed on Left, Sidebar on Right -->
+    <div class="blog-layout">
+        
+        <!-- LEFT: Posts Feed & Search -->
+        <div class="blog-posts-feed">
+          
+          <!-- Search bar container -->
+          <div id="search" class="blog-search-wrap"></div>
+          <link href="/pagefind/pagefind-ui.css" rel="stylesheet">
+          <script src="/pagefind/pagefind-ui.js"></script>
+          <script>
+              window.addEventListener('DOMContentLoaded', (event) => {
+                  new PagefindUI({ element: "#search", showSubResults: true, resetStyles: false });
+              });
+          </script>
+
+          <!-- Active Filter Indicator -->
+          <div id="filter-status" class="blog-filter-status">
+              Showing posts for: <span id="active-filter-name" style="font-weight: 700;"></span> 
+              <button onclick="clearFilter()" class="blog-filter-reset">Reset</button>
+          </div>
+
+          <!-- Post List Feed -->
+          {%- for post in collections.posts reversed -%}
+            <article class="post-item blog-post-item" data-tags="{{ post.data.tags | join: ',' }}" data-archive="{{ post.date | date: '%B %Y' }}">
+              <div class="blog-post-date">
+                <time datetime="{{ post.date }}">{{ post.date | date: "%B %d, %Y" }}</time>
+              </div>
+              <h2>
+                <a href="{{ post.url }}">{{ post.data.title }}</a>
+              </h2>
+              <p>{{ post.data.description }}</p>
+            </article>
+          {%- endfor -%}
+        </div>
+
+        <!-- RIGHT: Sidebar (Tags & Archives) -->
+        <aside class="blog-sidebar">
+            
+            <!-- Tags Box -->
+            <div class="blog-widget">
+                <h3>Tags</h3>
+                <ul>
+                    <li>
+                        <a href="#" onclick="filterByTag('all'); return false;" class="blog-widget-link-primary">
+                            <span>All Posts</span>
+                            <span class="blog-widget-count">({{ collections.posts.length }})</span>
+                        </a>
+                    </li>
+                    {%- for entry in collections.tagList -%}
+                        {%- assign tag = entry[0] -%}
+                        {%- assign count = entry[1] -%}
+                        <li>
+                            <a href="#" onclick="filterByTag('{{ tag }}'); return false;" class="blog-widget-link">
+                                <span>{{ tag }}</span>
+                                <span class="blog-widget-count">[{{ count }}]</span>
+                            </a>
+                        </li>
+                    {%- endfor -%}
+                </ul>
+            </div>
+
+            <!-- Archives Box -->
+            <div class="blog-widget">
+                <h3>Archives</h3>
+                <ul>
+                    {%- for entry in collections.archiveList -%}
+                        {%- assign archive = entry[0] -%}
+                        {%- assign count = entry[1] -%}
+                        <li>
+                            <a href="#" onclick="filterByArchive('{{ archive }}'); return false;" class="blog-widget-link">
+                                <span>{{ archive }}</span>
+                                <span class="blog-widget-count">[{{ count }}]</span>
+                            </a>
+                        </li>
+                    {%- endfor -%}
+                </ul>
+            </div>
+
+        </aside>
+
+    </div>
+
+</div>
+
+<script src="/assets/blog.js" defer></script>

@@ -1,0 +1,8 @@
+# Node dependencies
+node_modules/
+
+_site/
+
+# System files
+.DS_Store
+Thumbs.db
